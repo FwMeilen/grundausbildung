@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Schlusstest B – Stützpunktfeuerwehr Meilen</title>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --red:#CC0000;--red-dark:#990000;--red-light:#FDEAEA;
+  --black:#1a1a1a;--gray:#666;--gray-mid:#e0e0e0;
+  --green:#2d6a1f;--green-light:#eaf3e6;--orange:#cc7700;
+  --bg:#fff;--bg2:#f4f4f4;--bg3:#e8e8e8;
+  --text:#1a1a1a;--text2:#555;--text3:#888;
+}
+body{font-family:'Open Sans',Arial,sans-serif;background:var(--bg3);color:var(--text);min-height:100vh;font-size:14px;}
+.site-header{background:var(--black);}
+.site-header-inner{max-width:720px;margin:0 auto;padding:0 1rem;display:flex;align-items:center;height:54px;gap:12px;}
+.logo-text{color:#fff;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;line-height:1.2;}
+.logo-text span{display:block;font-size:10px;font-weight:400;color:#999;text-transform:none;letter-spacing:0;}
+.red-stripe{height:4px;background:var(--red);}
+.page{max-width:720px;margin:0 auto;padding:1.5rem 1rem 4rem;}
+.card{background:var(--bg);border:1px solid var(--gray-mid);border-top:3px solid var(--red);padding:1.5rem;margin-bottom:1rem;}
+.card h2{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.75rem;}
+.sub{color:var(--text2);font-size:13px;line-height:1.6;}
+label{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--gray);margin:0 0 5px;}
+input[type=text]{width:100%;padding:11px;border:1px solid var(--gray-mid);font-size:16px;font-family:inherit;border-radius:0;}
+input:focus{outline:none;border-color:var(--black);}
+.btn{height:46px;padding:0 20px;border:2px solid var(--black);background:var(--bg);color:var(--black);font-size:12px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.06em;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;width:100%;}
+.btn:hover{background:var(--black);color:#fff;}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+.btn-red{background:var(--red);color:#fff;border-color:var(--red);}
+.btn-red:hover{background:var(--red-dark);border-color:var(--red-dark);}
+.btn-green{background:var(--green);color:#fff;border-color:var(--green);}
+.btn-green:hover{background:#1e4d15;border-color:#1e4d15;}
+.screen{display:none;}
+.screen.aktiv{display:block;}
+.timer{position:sticky;top:0;z-index:20;background:var(--black);color:#fff;padding:.6rem 1rem;display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:700;}
+.timer.knapp{background:var(--red);}
+.fortschritt{height:4px;background:var(--gray-mid);}
+.fortschritt-bar{height:4px;background:var(--red);transition:width .3s;}
+.frage-nr{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--gray);margin-bottom:.5rem;}
+.frage-text{font-size:17px;font-weight:700;line-height:1.45;margin-bottom:1.25rem;}
+.antwort{border:2px solid var(--gray-mid);background:var(--bg);padding:1rem;margin-bottom:10px;cursor:pointer;font-size:15px;line-height:1.5;display:flex;gap:12px;align-items:flex-start;}
+.antwort:hover{border-color:var(--gray);}
+.antwort.gewaehlt{border-color:var(--red);background:var(--red-light);}
+.antwort-nr{font-weight:700;color:var(--gray);flex-shrink:0;}
+.antwort.gewaehlt .antwort-nr{color:var(--red);}
+.status-msg{font-size:13px;font-weight:600;margin-top:10px;padding:9px 12px;display:none;}
+.status-msg.ok-msg{display:block;background:var(--green-light);color:var(--green);border-left:3px solid var(--green);}
+.status-msg.err-msg{display:block;background:var(--red-light);color:var(--red-dark);border-left:3px solid var(--red);}
+.gross{font-size:34px;font-weight:700;}
+.badge{display:inline-block;padding:4px 14px;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.05em;}
+.detail-zeile{padding:11px 0;border-bottom:1px solid var(--gray-mid);font-size:13px;line-height:1.55;}
+.detail-zeile:last-child{border-bottom:none;}
+.punkt{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:8px;flex-shrink:0;}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;display:none;align-items:center;justify-content:center;padding:1.25rem;}
+.modal{background:#fff;max-width:380px;width:100%;padding:1.5rem;border-top:4px solid var(--red);}
+.modal h3{font-size:15px;margin-bottom:.6rem;}
+.modal p{font-size:13px;color:var(--text2);line-height:1.6;}
+.site-footer{background:var(--black);color:#888;font-size:11px;text-align:center;padding:1rem;}
+</style>
+</head>
+<body>
+
+<div class="site-header">
+  <div class="site-header-inner">
+    <img src="https://www.feuerwehr-meilen.ch/fileadmin/Public/Website/Templates/Images/Logo-FeuerwehrMeilen.png" alt="Stützpunktfeuerwehr Meilen" style="height:38px;width:auto;object-fit:contain;">
+    <div class="logo-text">Stützpunktfeuerwehr Meilen<span>Schlusstest Kategorie B</span></div>
+  </div>
+</div>
+<div class="red-stripe"></div>
+
+<div class="timer" id="timer" style="display:none">
+  <span id="timer-frage">Frage 1 von 10</span>
+  <span id="timer-zeit">15:00</span>
+</div>
+<div class="fortschritt" id="fortschritt" style="display:none"><div class="fortschritt-bar" id="fortschritt-bar" style="width:0%"></div></div>
+
+<div class="page">
+
+  <!-- START -->
+  <div class="screen aktiv" id="s-start">
+    <div class="card">
+      <h2>Schlusstest Kategorie B</h2>
+      <p class="sub" style="margin-bottom:1.25rem">
+        <b id="info-anzahl">10</b> Fragen aus dem Prüfungskatalog · Zeitlimit <b id="info-minuten">15</b> Minuten<br>
+        Zum Bestehen sind <b id="info-grenze">8</b> richtige Antworten nötig.
+      </p>
+      <label for="f-kuerzel">Dein Kürzel</label>
+      <input type="text" id="f-kuerzel" maxlength="4" style="text-transform:uppercase" autocomplete="off"
+        onkeydown="if(event.key==='Enter')testStarten()">
+      <div style="margin-top:1.25rem"><button class="btn btn-red" id="btn-start" onclick="testStarten()">Test starten</button></div>
+      <div class="status-msg" id="start-status"></div>
+    </div>
+  </div>
+
+  <!-- FRAGE -->
+  <div class="screen" id="s-frage">
+    <div class="card">
+      <div class="frage-nr" id="q-nr">Frage 1 von 10</div>
+      <div class="frage-text" id="q-text"></div>
+      <div id="q-antworten"></div>
+      <div style="margin-top:1.25rem"><button class="btn btn-red" id="btn-weiter" onclick="antwortBestaetigen()" disabled>Weiter</button></div>
+    </div>
+  </div>
+
+  <!-- RESULTAT -->
+  <div class="screen" id="s-resultat">
+    <div class="card" style="text-align:center">
+      <div id="res-badge" style="margin-bottom:1rem"></div>
+      <div class="gross" id="res-punkte">–</div>
+      <div class="sub" id="res-text"></div>
+      <div class="sub" style="margin-top:.5rem;color:var(--text3)" id="res-dauer"></div>
+      <div style="margin-top:1.5rem"><button class="btn btn-green" id="btn-pdf" onclick="pdfHerunterladen()">Bestätigung als PDF</button></div>
+      <div class="status-msg" id="res-status"></div>
+      <div style="margin-top:.6rem"><button class="btn" onclick="location.reload()">Neuer Test</button></div>
+    </div>
+    <div class="card">
+      <h2>Auswertung im Detail</h2>
+      <div id="res-detail"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Kürzel-Warnung -->
+<div class="overlay" id="kuerzel-overlay">
+  <div class="modal">
+    <h3>Kürzel nicht gefunden</h3>
+    <p id="kuerzel-text"></p>
+    <div style="display:flex;gap:10px;margin-top:1.25rem">
+      <button class="btn" style="flex:1" onclick="kuerzelZurueck()">Zurück</button>
+      <button class="btn btn-green" style="flex:1" onclick="kuerzelWeiter()">Weiter</button>
+    </div>
+  </div>
+</div>
+
+<div class="site-footer">© Stützpunktfeuerwehr Meilen / LOL &nbsp;·&nbsp; CLv1.00</div>
+
+<script>
+const EXEC_URL="https://script.google.com/macros/s/AKfycbwvTL3yecdyTvSV5ZPgGslm5K-3UFjW9zc4A2qn_zUk50CcSIpXEaBE1hMiaU3GnNEQ/exec";
+const VERSION="CLv1.00";
+
+let FRAGEN=[], IDX=0, GEWAEHLT=null, ANTWORTEN=[], PERSON=null;
+let GRENZE=8, MINUTEN=15, START_ZEIT=null, TIMER=null, KUERZEL_BESTAETIGT=false, RESULTAT=null;
+
+function $(id){return document.getElementById(id);}
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("aktiv"));$(id).classList.add("aktiv");window.scrollTo(0,0);}
+
+async function serverRuf(payload,versuch){
+  versuch=versuch||1;
+  const res=await fetch(EXEC_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)});
+  const text=await res.text();
+  try{ return JSON.parse(text); }
+  catch(e){
+    if(text.trim().startsWith("<") && versuch<3){
+      await new Promise(r=>setTimeout(r,600*versuch));
+      return serverRuf(payload,versuch+1);
+    }
+    throw new Error("Server nicht erreichbar. Bitte kurz warten und erneut versuchen.");
+  }
+}
+
+/* ── Start ── */
+async function testStarten(){
+  const kuerzel=$("f-kuerzel").value.trim().toUpperCase();
+  const st=$("start-status"), btn=$("btn-start");
+  st.className="status-msg"; st.style.display="block";
+  if(!kuerzel){ st.className="status-msg err-msg"; st.textContent="Bitte Kürzel eingeben."; return; }
+  btn.disabled=true; st.textContent="Test wird vorbereitet…";
+  try{
+    const r=await serverRuf({type:"ga_b_start",kuerzel,kuerzelBestaetigt:KUERZEL_BESTAETIGT});
+    if(r.ok){
+      FRAGEN=r.fragen; PERSON=r.person; GRENZE=r.grenze; MINUTEN=r.minuten;
+      IDX=0; ANTWORTEN=[]; START_ZEIT=Date.now();
+      st.style.display="none";
+      $("timer").style.display="flex"; $("fortschritt").style.display="block";
+      starteTimer();
+      zeigeFrage();
+    } else if(r.error==="KUERZEL_UNBEKANNT"){
+      $("kuerzel-text").textContent=`Das Kürzel „${kuerzel}" ist nicht in der Mitgliederliste. Trotzdem starten?`;
+      $("kuerzel-overlay").style.display="flex";
+      st.style.display="none"; btn.disabled=false;
+    } else if(r.error==="KEINE_FRAGEN"||r.error==="ZU_WENIG_FRAGEN"){
+      st.className="status-msg err-msg"; st.textContent="Es sind noch nicht genügend Fragen hinterlegt."; btn.disabled=false;
+    } else {
+      st.className="status-msg err-msg"; st.textContent="Fehler beim Starten."; btn.disabled=false;
+    }
+  }catch(e){ st.className="status-msg err-msg"; st.textContent=e.message; btn.disabled=false; }
+}
+
+function kuerzelZurueck(){ $("kuerzel-overlay").style.display="none"; KUERZEL_BESTAETIGT=false; }
+function kuerzelWeiter(){ $("kuerzel-overlay").style.display="none"; KUERZEL_BESTAETIGT=true; testStarten(); }
+
+/* ── Timer ── */
+function starteTimer(){
+  const ende=START_ZEIT+MINUTEN*60000;
+  TIMER=setInterval(()=>{
+    const rest=Math.max(0,ende-Date.now());
+    const m=Math.floor(rest/60000), s=Math.floor((rest%60000)/1000);
+    $("timer-zeit").textContent=String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+    $("timer").classList.toggle("knapp",rest<120000);
+    if(rest<=0){ clearInterval(TIMER); testAbschliessen(true); }
+  },500);
+}
+
+/* ── Fragen ── */
+function zeigeFrage(){
+  const q=FRAGEN[IDX];
+  GEWAEHLT=null;
+  $("q-nr").textContent=`Frage ${IDX+1} von ${FRAGEN.length}`;
+  $("timer-frage").textContent=`Frage ${IDX+1} von ${FRAGEN.length}`;
+  $("fortschritt-bar").style.width=(IDX/FRAGEN.length*100)+"%";
+  $("q-text").textContent=q.frage;
+  $("q-antworten").innerHTML=q.antworten.map((a,i)=>
+    `<div class="antwort" id="antw-${i}" onclick="antwortWaehlen(${i})">
+      <span class="antwort-nr">${i+1}</span><span>${esc(a)}</span>
+    </div>`).join("");
+  $("btn-weiter").disabled=true;
+  $("btn-weiter").textContent=(IDX===FRAGEN.length-1)?"Test abschliessen":"Weiter";
+  show("s-frage");
+}
+
+function antwortWaehlen(i){
+  GEWAEHLT=i+1;
+  document.querySelectorAll(".antwort").forEach((el,n)=>el.classList.toggle("gewaehlt",n===i));
+  $("btn-weiter").disabled=false;
+}
+
+function antwortBestaetigen(){
+  if(GEWAEHLT===null) return;
+  const q=FRAGEN[IDX];
+  ANTWORTEN.push({id:q.id,frage:q.frage,gegeben:q.antworten[GEWAEHLT-1],
+    korrekt:q.antworten[q.korrekt-1],richtig:GEWAEHLT===q.korrekt,erklaerung:q.erklaerung});
+  IDX++;
+  if(IDX>=FRAGEN.length) testAbschliessen(false);
+  else zeigeFrage();
+}
+
+/* ── Abschluss ── */
+async function testAbschliessen(zeitAbgelaufen){
+  if(TIMER) clearInterval(TIMER);
+  $("timer").style.display="none"; $("fortschritt").style.display="none";
+  const richtig=ANTWORTEN.filter(a=>a.richtig).length;
+  const dauerSek=Math.round((Date.now()-START_ZEIT)/1000);
+  const dauer=String(Math.floor(dauerSek/60)).padStart(2,"0")+":"+String(dauerSek%60).padStart(2,"0");
+  const falsch=ANTWORTEN.filter(a=>!a.richtig).map(a=>a.id).join(", ");
+
+  let bestanden=!zeitAbgelaufen&&richtig>=GRENZE;
+  try{
+    const r=await serverRuf({type:"ga_b_abschluss",person:PERSON,richtig,total:FRAGEN.length,
+      dauer,falsch,zeitAbgelaufen:!!zeitAbgelaufen});
+    if(r.ok) bestanden=r.bestanden;
+  }catch(e){ console.warn("Speichern fehlgeschlagen:",e); }
+
+  RESULTAT={bestanden,richtig,total:FRAGEN.length,dauer,zeitAbgelaufen:!!zeitAbgelaufen};
+
+  $("res-badge").innerHTML=bestanden
+    ? '<span class="badge" style="background:var(--green)">Bestanden</span>'
+    : `<span class="badge" style="background:var(--red)">${zeitAbgelaufen?"Zeit abgelaufen":"Nicht bestanden"}</span>`;
+  $("res-punkte").textContent=`${richtig} / ${FRAGEN.length}`;
+  $("res-punkte").style.color=bestanden?"var(--green)":"var(--red)";
+  $("res-text").textContent=bestanden
+    ? "Herzliche Gratulation – der Schlusstest ist bestanden."
+    : (zeitAbgelaufen ? "Das Zeitlimit wurde überschritten." : `Zum Bestehen wären ${GRENZE} richtige Antworten nötig gewesen.`);
+  $("res-dauer").textContent=`Benötigte Zeit: ${dauer} Minuten`;
+
+  $("res-detail").innerHTML=ANTWORTEN.map((a,i)=>{
+    const farbe=a.richtig?"var(--green)":"var(--red)";
+    let h=`<div class="detail-zeile">
+      <div style="display:flex;align-items:flex-start">
+        <span class="punkt" style="background:${farbe};margin-top:6px"></span>
+        <span><b>${i+1}. ${esc(a.frage)}</b></span>
+      </div>`;
+    if(!a.richtig){
+      h+=`<div style="margin-left:17px;color:var(--text3);margin-top:4px">Deine Antwort: ${esc(a.gegeben)}</div>`;
+      h+=`<div style="margin-left:17px;color:var(--green)">Korrekt: ${esc(a.korrekt)}</div>`;
+      if(a.erklaerung) h+=`<div style="margin-left:17px;color:var(--text2);margin-top:3px;font-style:italic">${esc(a.erklaerung)}</div>`;
+    }
+    return h+"</div>";
+  }).join("");
+
+  show("s-resultat");
+}
+
+/* ── PDF ── */
+function pdfHerunterladen(){
+  if(!window.jspdf){ alert("PDF-Bibliothek konnte nicht geladen werden."); return; }
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF();
+  const r=RESULTAT;
+  const name=`${PERSON.vorname} ${PERSON.name}`.trim()||PERSON.kuerzel;
+  let y=20;
+
+  doc.setFont("helvetica","bold"); doc.setFontSize(14);
+  doc.text("Stützpunktfeuerwehr Meilen",20,y); y+=7;
+  doc.setFontSize(11); doc.text("Grundausbildung Kategorie B – Schlusstest",20,y); y+=4;
+  doc.setDrawColor(204,0,0); doc.setLineWidth(.8); doc.line(20,y,190,y); y+=8;
+
+  doc.setFillColor(244,244,244); doc.rect(16,y-5,178,32,'F');
+  doc.setFontSize(10);
+  const zeile=(l,w)=>{ doc.setFont("helvetica","bold"); doc.text(l,20,y);
+    doc.setFont("helvetica","normal"); doc.text(String(w),68,y); y+=6; };
+  zeile("Datum:",new Date().toLocaleDateString("de-CH"));
+  zeile("Name:",name);
+  zeile("Kürzel:",PERSON.kuerzel);
+  zeile("Benötigte Zeit:",r.dauer+" Minuten");
+  y+=6; doc.setDrawColor(224,224,224); doc.setLineWidth(.3); doc.line(20,y,190,y); y+=8;
+
+  doc.setFont("helvetica","bold"); doc.setFontSize(11); doc.text("Resultat",20,y); y+=8;
+  doc.setFontSize(13);
+  doc.setTextColor(r.bestanden?45:204, r.bestanden?106:0, r.bestanden?31:0);
+  doc.text(r.bestanden?"BESTANDEN":(r.zeitAbgelaufen?"NICHT BESTANDEN – Zeit abgelaufen":"NICHT BESTANDEN"),20,y);
+  doc.setTextColor(0,0,0); y+=8;
+  doc.setFontSize(10);
+  zeile("Punkte:",`${r.richtig} von ${r.total} (nötig: ${GRENZE})`);
+
+  y+=4; doc.setFont("helvetica","bold"); doc.setFontSize(10); doc.text("Fragen im Detail:",20,y); y+=7;
+  ANTWORTEN.forEach((a,i)=>{
+    if(y>265){ doc.addPage(); y=20; }
+    doc.setFillColor(a.richtig?45:204, a.richtig?106:0, a.richtig?31:0);
+    doc.circle(21.5,y-1.2,1.8,"F");
+    doc.setFont("helvetica","bold"); doc.setFontSize(9); doc.setTextColor(0,0,0);
+    const zeilen=doc.splitTextToSize(`${i+1}. ${a.frage}`,158);
+    doc.text(zeilen,26,y); y+=zeilen.length*4.5;
+    doc.setFont("helvetica","normal"); doc.setFontSize(8.5);
+    if(!a.richtig){
+      doc.setTextColor(120,120,120);
+      const dz=doc.splitTextToSize(`Deine Antwort: ${a.gegeben}`,153);
+      doc.text(dz,26,y); y+=dz.length*4;
+    }
+    doc.setTextColor(45,106,31);
+    const kz=doc.splitTextToSize(`Korrekt: ${a.korrekt}`,153);
+    doc.text(kz,26,y); y+=kz.length*4+2.5;
+    doc.setTextColor(0,0,0); doc.setFontSize(10);
+  });
+
+  y+=6; if(y>275){ doc.addPage(); y=20; }
+  doc.setDrawColor(224,224,224); doc.line(20,y,190,y); y+=6;
+  doc.setFontSize(8); doc.setTextColor(120,120,120);
+  doc.text(`Erstellt: ${new Date().toLocaleString("de-CH")} · ${VERSION}`,20,y);
+
+  const datei=`GrundausbildungB_${new Date().toISOString().slice(0,10)}_${PERSON.kuerzel}.pdf`;
+  doc.save(datei);
+
+  // Zusätzlich im Archiv ablegen
+  const st=$("res-status");
+  st.className="status-msg"; st.style.display="block"; st.textContent="Wird archiviert…";
+  const base64=doc.output("datauristring").split(",")[1];
+  serverRuf({type:"ga_b_pdf",filename:datei,pdfBase64:base64})
+    .then(a=>{
+      if(a.ok){ st.className="status-msg ok-msg"; st.textContent="PDF heruntergeladen und archiviert."; }
+      else{ st.className="status-msg err-msg"; st.textContent="PDF heruntergeladen, Archivierung fehlgeschlagen."; }
+    })
+    .catch(()=>{ st.className="status-msg err-msg"; st.textContent="PDF heruntergeladen, Archivierung fehlgeschlagen."; });
+}
+
+// Warnung beim Verlassen während des Tests
+window.addEventListener("beforeunload", e=>{
+  if(TIMER && IDX<FRAGEN.length){ e.preventDefault(); e.returnValue=""; }
+});
+</script>
+</body>
+</html>

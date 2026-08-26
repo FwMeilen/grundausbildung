@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ausbildungsinhalte B – Stützpunktfeuerwehr Meilen</title>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --red:#CC0000;--red-dark:#990000;--red-light:#FDEAEA;
+  --black:#1a1a1a;--gray:#666;--gray-mid:#e0e0e0;
+  --green:#2d6a1f;--green-light:#eaf3e6;
+  --bg:#fff;--bg2:#f4f4f4;--bg3:#e8e8e8;
+  --text:#1a1a1a;--text2:#555;--text3:#888;
+}
+body{font-family:'Open Sans',Arial,sans-serif;background:var(--bg3);color:var(--text);min-height:100vh;font-size:14px;}
+.site-header{background:var(--black);}
+.site-header-inner{max-width:860px;margin:0 auto;padding:0 1rem;display:flex;align-items:center;height:54px;gap:12px;}
+.logo-text{color:#fff;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;line-height:1.2;}
+.logo-text span{display:block;font-size:10px;font-weight:400;color:#999;text-transform:none;letter-spacing:0;}
+.red-stripe{height:4px;background:var(--red);}
+.page{max-width:860px;margin:0 auto;padding:1.25rem 1rem 4rem;}
+.card{background:var(--bg);border:1px solid var(--gray-mid);border-top:3px solid var(--red);padding:1.25rem;margin-bottom:1rem;}
+.card h2{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem;}
+.sub{color:var(--text2);font-size:13px;line-height:1.6;}
+.btn{height:34px;padding:0 14px;border:2px solid var(--black);background:var(--bg);color:var(--black);font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.05em;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit;}
+.btn:hover{background:var(--black);color:#fff;}
+.lektion{background:var(--bg);border:1px solid var(--gray-mid);border-top:3px solid var(--red);margin-bottom:1rem;}
+.lektion-kopf{padding:1rem 1.25rem;display:flex;align-items:center;gap:12px;cursor:pointer;}
+.lektion-titel{flex:1;font-size:15px;font-weight:700;}
+.lektion-dauer{font-size:11px;font-weight:700;background:var(--bg2);border:1px solid var(--gray-mid);padding:3px 9px;color:var(--gray);white-space:nowrap;}
+.lektion-fortschritt{font-size:11px;color:var(--text3);white-space:nowrap;}
+.pfeil{transition:transform .15s;color:var(--gray);font-size:11px;}
+.lektion.offen .pfeil{transform:rotate(90deg);}
+.lektion-inhalt{display:none;border-top:1px solid var(--gray-mid);}
+.lektion.offen .lektion-inhalt{display:block;}
+.punkt-zeile{display:flex;gap:12px;padding:.9rem 1.25rem;border-bottom:1px solid var(--gray-mid);align-items:flex-start;}
+.punkt-zeile:last-child{border-bottom:none;}
+.punkt-zeile.erledigt{background:var(--green-light);}
+.check{width:22px;height:22px;border:2px solid var(--gray-mid);flex-shrink:0;cursor:pointer;display:flex;align-items:center;
+  justify-content:center;background:#fff;margin-top:2px;}
+.punkt-zeile.erledigt .check{background:var(--green);border-color:var(--green);}
+.check svg{display:none;}
+.punkt-zeile.erledigt .check svg{display:block;}
+.punkt-dauer{font-size:11px;font-weight:700;color:var(--gray);min-width:34px;flex-shrink:0;margin-top:4px;}
+.punkt-thema{font-size:14px;font-weight:700;margin-bottom:4px;}
+.punkt-inhalt{font-size:13px;color:var(--text2);line-height:1.65;white-space:pre-line;}
+.balken{height:5px;background:var(--gray-mid);}
+.balken-fill{height:5px;background:var(--green);transition:width .3s;}
+.site-footer{background:var(--black);color:#888;font-size:11px;text-align:center;padding:1rem;}
+@media print{
+  .site-header,.red-stripe,.site-footer,.btn,.check{display:none;}
+  .lektion-inhalt{display:block !important;}
+  .lektion{break-inside:avoid;}
+}
+</style>
+</head>
+<body>
+
+<div class="site-header">
+  <div class="site-header-inner">
+    <img src="https://www.feuerwehr-meilen.ch/fileadmin/Public/Website/Templates/Images/Logo-FeuerwehrMeilen.png" alt="Stützpunktfeuerwehr Meilen" style="height:38px;width:auto;object-fit:contain;">
+    <div class="logo-text">Stützpunktfeuerwehr Meilen<span>Ausbildungsinhalte Kategorie B</span></div>
+  </div>
+</div>
+<div class="red-stripe"></div>
+
+<div class="page">
+  <div class="card">
+    <h2>Ausbildungsinhalte Kategorie B</h2>
+    <p class="sub">
+      Gedächtnisstütze für Ausbildner. Abgearbeitete Punkte lassen sich abhaken –
+      der Stand bleibt auf diesem Gerät gespeichert.
+    </p>
+    <div class="balken" style="margin-top:1rem"><div class="balken-fill" id="gesamt-balken" style="width:0%"></div></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:.75rem;gap:10px;flex-wrap:wrap">
+      <span class="sub" id="gesamt-text">0 von 0 Punkten abgearbeitet</span>
+      <div style="display:flex;gap:8px">
+        <button class="btn" onclick="alleAufklappen()">Alle aufklappen</button>
+        <button class="btn" onclick="zuruecksetzen()">Zurücksetzen</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="lektionen"></div>
+</div>
+
+<div class="site-footer">© Stützpunktfeuerwehr Meilen / LOL &nbsp;·&nbsp; CLv1.00</div>
+
+<script>
+const LEKTIONEN = [{"titel": "Lektion 1 – Grundlagen / Parkdienst", "dauer": "1h", "punkte": [{"dauer": "10’", "thema": "Grundsätzliches", "inhalt": "Ablauf B-Ausbildung (Module erläutern)\nFahrfähigkeit (Alkohol / Drogen/Übermüdung)\nWann darf ein Fw Fahrzeug gefahren werden? (Nur mit Auftrag)\nFahrbewilligungen -> gemäss “Was darf ich fahren”\nPagermeldung Verhalten bei Ein-/Ausrücken - Parkieren und PP"}, {"dauer": "5’", "thema": "Verschiedene Fahrzeuge. Aufgaben und deren Standorte", "inhalt": "LZ: Fahrzeuge und Stellplätze kennen.\nPersonentransport: PTF 2,3,5 und 1 (Herrliberg)\nVerkehrsgruppe: VA\nFR: San Fz\nEL-Leitung: Meilen 1\nFU: Kdo\nOel/Wasser: OWF\nMaterialtransport: PTF4 und 7 – Hinweisen: MTF über 3.5t!"}, {"dauer": "5’", "thema": "Schlüsselstandorte und Tanken", "inhalt": "LZ: Schlüsselkasten Standorte kennen, öffnen und schliessen. Tanken können.\nStandorte Schlüsselkasten (Meilen/H’berg)\nSchlüsselkasten öffnen (mit Depot-Schlüssel oder Schlüssel an Fz Schlüsselbund)\nSchlüssel bei Fz in Halle: Im Fahrzeug (nicht stecken lassen wegen Batterie)\nTankkarten B (SOCAR und AGROLA) hat PIN aufgeklebt\nDiesel / Benzin Thema"}, {"dauer": "5’", "thema": "Parkieren / Laden / Tore", "inhalt": "LZ: Verstehen, wie wir parkieren. Tore bedienen und Fz an Strom anschliessen.\nWeisse Linien und Rote Reifenpositionsstrich zeigen\nStromanschlüsse und Stromauszug in der Halle sowie Anschlüsse Parkplätze zeigen – ink kleine Anschlüsse PTF 4/Meilen 1\nTorsteuerung Meilen: An der Säule, in Zentrale und Drücker in Fz\nTorsteuerung Herrliberg: Handarbeit (wird bei Fahrschule gezeigt)"}, {"dauer": "10’", "thema": "Schneeketten", "inhalt": "LZ: Standort der Schneeketten kennen. Grundsätzliches Wissen Schneeketten. Theoretisch! \nAufgebot zum Montieren der Schneeketten via Alarm (BAG), BAG Of oder wird durch BaDF montiert\nHerbst bis Frühling sind die Schneeketten in Raco-Box neben Fahrzeugen\nSchneeketten immer auf Antriebsachse. Bei 4x4 vorne.\nIn Halle montieren, danach 200m fahren und nachziehen!\nMit Schneeketten: Max 50 Km/h!\nDas Fahrverhalten kann sich betreffend Lenk- und Bremsverhalten vom Fahren ohne Schneeketten massiv unterscheiden\nZwei Arten von Montage:"}, {"dauer": "5’", "thema": "Fahrtenheft", "inhalt": "LZ: Kenntnisse Fahrtenheft.\nStandorte bei ein- oder zwei Fz anschauen (Türe Fahrer, Mittekonsole, Handschuhfach)\nRechtlich nötige Nachvollziehbarkeit des Fahrzeugführers\nImmer direkt nach Fahrt eintragen\nZusammen einen Eintrag anschauen: Datum, Grund und Kürzel: Leserlich! Tanken eintragen – für Statistik."}, {"dauer": "5’", "thema": "Materialkontrolle", "inhalt": "LZ: Der Fahrzeugführer ist für die Vollständigkeit (oder Rep Zettel) des Materials verantwortlich!\nMaterialkontrolle PTF als Beispiel\nInsb Fk: Kanal 3 und abschalten, sonst laden sie nicht!\nStandort Rep-Zettel zeigen, eines als Bsp ausfüllen (Werkbank) dann ins Fach «Materialwärte» bei Zentrale"}, {"dauer": "10’", "thema": "Reinigung", "inhalt": "LZ: Praktisches Aufzeigen der Aussen- und Innenreinigung inkl Waschplatz.\nAussenreinigung bei Bedarf, insb aber Radkästen und nur wenn nötig Scheiben (sonst gibt es Kalkablagerungen)\nAussenreinigungsplatz: Toröffnung und Schlauch zeigen. Arbeitszeiten und Privatgebrauch erklären (Schild hängt)\nSchlauchstandorte für Aussenreinigung vor den Toren: An zwei Säulen zeigen und einen Schlauch anschliessen\nInnenreinigung jedes Mal nach Fahrt:\nKübel mit Reinigungsmat ebenfalls an Säulen\nInnenraum mit Wischer oder Feucht mit Schwamm\nErklärung Blatt “Fahrzeug einsatzbereit stellen”"}, {"dauer": "5’", "thema": "Abschluss", "inhalt": "Kurze Zusammenfassung, Prontokotrolle (bsp «Wie öffnest Du den Schlüsselschrank, wenn Du Deinen Schlüssel zuhause liegen lassen hast?» etc und Fragen beantworten"}]}, {"titel": "Lektion 2 – Verhalten bei Unfall / Panne und RAG", "dauer": "30'", "punkte": [{"dauer": "2’", "thema": "Einführung", "inhalt": "Was machen wir bei einer Ausnahmesituation bsp Panne oder Unfall\nBei SoSi und Bagatelle Möglichkeit der Weiterfahrt – gut Abwägen!"}, {"dauer": "5’", "thema": "Verhalten bei Panne", "inhalt": "LZ: Verhalten bei einer Panne (Motorendefekt, platter Reifen etc) durchsprechen\nFahrzeug und Stelle sichern\nInformation an Zentrale oder Of\nInformation an BadF"}, {"dauer": "10’", "thema": "RAG und Impulstrennschalter", "inhalt": "Gemäss Blatt «RAG Erklärung» und Test SCA"}, {"dauer": "10’", "thema": "Verhalten bei Unfall", "inhalt": "LZ: Verhalten bei Unfall durchsprechen\nSichern der Unfallstelle  \nErste Hilfe leisten, Betreuen von Verletzten  \nBetreuen des Fahrers (Schock)  \nAufgebot von Polizei und Sanität (wenn notwendig) \nInformation an die ELZ (Polycom 523) oder 044 289 32 22 \nInformation der eigenen Feuerwehr (Kommando, MWD-Fachausbilder) 044 925 90 00 \nRAG V-Impulstrennschalter aktivieren oder RAG-Datenträger sicherstellen \nDie Lage der Unfallfahrzeuge markieren  \nFotografieren der Unfallstelle"}, {"dauer": "5’", "thema": "Abschluss", "inhalt": "Kurze Zusammenfassung, Prontokotrolle (bsp «Was machst Du, wenn der Reifen platt ist?» etc und Fragen beantworten"}]}, {"titel": "Lektion 3 – B Fahren", "dauer": "1.5h", "punkte": [{"dauer": "5’", "thema": "Einführung", "inhalt": "Vorsichtiges, vorausschauendes Fahren: es bringt nichts schneller zu sein\nVerantwortung des Fahrers (Sicherheit: zB Gurten, Ladungssicherung, Fahrfähigkeit), Hilfe für EL/Of/Uof: (Sind alle dabei? Etc)\nFahrschulordner / Fahrschulpager erklären und zeigen"}, {"dauer": "10’", "thema": "Fz-Kenntnisse", "inhalt": "LZ: Verschiedene Armaturenbretter, Schlüsselsysteme etc kennen\nRepetition Schlüssel (Stao und Systeme)\nVerschiedene Armaturenbretter anschauen – insb Lichtsteuerung (Auto, Stao Drehschalter etc)\nSitz- und Spiegeleinstellung tätigen"}, {"dauer": "10’", "thema": "Fahrt", "inhalt": "LZ: Fahrtraining\nFahrt zu Depot Rennweg zB via Schützenhaus Herrliberg"}, {"dauer": "5’", "thema": "Depot Rennweg", "inhalt": "LZ: Depot Herrliberg kennen.\nZutritt, \nTore öffnen, \nStandort Schlüsselkasten und Tankkarte\nStandort Reinigungsmaterial inkl Schlauch"}, {"dauer": "15’", "thema": "Manöver", "inhalt": "LZ: Grösse der Fz kennenlernen.\nSeitlich Einparkieren (zB mit Pylone von TLF2)\nEinparkieren Parkfelder Kirche\nEinparkieren PTF 1"}, {"dauer": "15’", "thema": "Parkieren am Einsatzort", "inhalt": "LZ: Verhalten am Ei Ort.\nOrangelicht (über SoSi Steuerung, nicht Fz)\nTriopan vorne / hinten\nStandortwahl (möglichst wenig Verkehrsbehinderung, aber optimal für Ei)"}, {"dauer": "10’", "thema": "Fahrt", "inhalt": "LZ: Fahrtraining\nFahrt Depot Meilen zB via Seestrasse"}, {"dauer": "10’", "thema": "Retablieren", "inhalt": "Fz Reinigen, Versorgen, Eintragen"}, {"dauer": "10’", "thema": "Ladungssicherung", "inhalt": "LZ: Grundsätze der Ladungssicherung anwenden\nBei PTF 4/7:\nSchutznetz Grün\nSpanngurten\nTrennwand\nAussenwände"}, {"dauer": "3’", "thema": "Abschluss", "inhalt": "Kurze Zusammenfassung, Prontokotrolle (bsp «Was machst Du, wenn du an einem Ei Ort ankommst?» etc und Fragen beantworten"}]}, {"titel": "TEST – B Fahren", "dauer": "1h", "punkte": [{"dauer": "10’", "thema": "Mündliche Abfrage Grundlagen / Parkdienst", "inhalt": "Beispielfragen folgen"}, {"dauer": "30’", "thema": "Fahrt", "inhalt": "Testkriterien folgen"}, {"dauer": "15’", "thema": "Parkours", "inhalt": "Testparkours- und Messkriterien folgen"}, {"dauer": "5’", "thema": "Retablieren", "inhalt": "Messkriterien folgen"}, {"dauer": "5’", "thema": "Resultat / Besprechung", "inhalt": "Vorlage folgt"}]}];
+const SPEICHER_KEY = "ga_b_fortschritt_v1";
+let ERLEDIGT = {};
+
+function $(id){return document.getElementById(id);}
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+
+function laden(){
+  try{ ERLEDIGT = JSON.parse(localStorage.getItem(SPEICHER_KEY) || "{}"); }
+  catch(e){ ERLEDIGT = {}; }
+}
+function speichern(){
+  try{ localStorage.setItem(SPEICHER_KEY, JSON.stringify(ERLEDIGT)); }catch(e){}
+}
+
+function rendern(){
+  $("lektionen").innerHTML = LEKTIONEN.map((lek,li)=>{
+    const erledigt = lek.punkte.filter((_,pi)=>ERLEDIGT[li+"-"+pi]).length;
+    return `<div class="lektion" id="lek-${li}">
+      <div class="lektion-kopf" onclick="lektionUmschalten(${li})">
+        <span class="pfeil">&#9654;</span>
+        <span class="lektion-titel">${esc(lek.titel)}</span>
+        <span class="lektion-fortschritt" id="lek-fort-${li}">${erledigt}/${lek.punkte.length}</span>
+        <span class="lektion-dauer">${esc(lek.dauer)}</span>
+      </div>
+      <div class="lektion-inhalt">
+        ${lek.punkte.map((p,pi)=>{
+          const an = !!ERLEDIGT[li+"-"+pi];
+          return `<div class="punkt-zeile${an?" erledigt":""}" id="pz-${li}-${pi}" onclick="punktUmschalten(${li},${pi})">
+            <div class="check">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="punkt-dauer">${esc(p.dauer)}</div>
+            <div style="flex:1;min-width:0">
+              <div class="punkt-thema">${esc(p.thema)}</div>
+              <div class="punkt-inhalt">${esc(p.inhalt)}</div>
+            </div>
+          </div>`;
+        }).join("")}
+      </div>
+    </div>`;
+  }).join("");
+  gesamtAktualisieren();
+}
+
+function lektionUmschalten(li){ $("lek-"+li).classList.toggle("offen"); }
+
+function punktUmschalten(li,pi){
+  const key = li+"-"+pi;
+  ERLEDIGT[key] = !ERLEDIGT[key];
+  if(!ERLEDIGT[key]) delete ERLEDIGT[key];
+  speichern();
+  $("pz-"+li+"-"+pi).classList.toggle("erledigt", !!ERLEDIGT[key]);
+  const lek = LEKTIONEN[li];
+  const erledigt = lek.punkte.filter((_,n)=>ERLEDIGT[li+"-"+n]).length;
+  $("lek-fort-"+li).textContent = erledigt+"/"+lek.punkte.length;
+  gesamtAktualisieren();
+}
+
+function gesamtAktualisieren(){
+  const total = LEKTIONEN.reduce((s,l)=>s+l.punkte.length,0);
+  const erledigt = Object.keys(ERLEDIGT).length;
+  $("gesamt-balken").style.width = total ? (erledigt/total*100)+"%" : "0%";
+  $("gesamt-text").textContent = `${erledigt} von ${total} Punkten abgearbeitet`;
+}
+
+function alleAufklappen(){
+  const alleOffen = LEKTIONEN.every((_,li)=>$("lek-"+li).classList.contains("offen"));
+  LEKTIONEN.forEach((_,li)=>$("lek-"+li).classList.toggle("offen", !alleOffen));
+}
+
+function zuruecksetzen(){
+  if(!confirm("Alle Haken zurücksetzen?")) return;
+  ERLEDIGT = {}; speichern(); rendern();
+}
+
+laden();
+rendern();
+</script>
+</body>
+</html>
