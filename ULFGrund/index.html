@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ausbildungsinhalte ULF – Stützpunktfeuerwehr Meilen</title>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --red:#CC0000;--red-dark:#990000;--red-light:#FDEAEA;
+  --black:#1a1a1a;--gray:#666;--gray-mid:#e0e0e0;
+  --green:#2d6a1f;--green-light:#eaf3e6;
+  --bg:#fff;--bg2:#f4f4f4;--bg3:#e8e8e8;
+  --text:#1a1a1a;--text2:#555;--text3:#888;
+}
+body{font-family:'Open Sans',Arial,sans-serif;background:var(--bg3);color:var(--text);min-height:100vh;font-size:14px;}
+.site-header{background:var(--black);}
+.site-header-inner{max-width:860px;margin:0 auto;padding:0 1rem;display:flex;align-items:center;height:54px;gap:12px;}
+.logo-text{color:#fff;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;line-height:1.2;}
+.logo-text span{display:block;font-size:10px;font-weight:400;color:#999;text-transform:none;letter-spacing:0;}
+.red-stripe{height:4px;background:var(--red);}
+.page{max-width:860px;margin:0 auto;padding:1.25rem 1rem 4rem;}
+.card{background:var(--bg);border:1px solid var(--gray-mid);border-top:3px solid var(--red);padding:1.25rem;margin-bottom:1rem;}
+.card h2{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem;}
+.sub{color:var(--text2);font-size:13px;line-height:1.6;}
+.btn{height:34px;padding:0 14px;border:2px solid var(--black);background:var(--bg);color:var(--black);font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.05em;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit;}
+.btn:hover{background:var(--black);color:#fff;}
+.lektion{background:var(--bg);border:1px solid var(--gray-mid);border-top:3px solid var(--red);margin-bottom:1rem;}
+.lektion-kopf{padding:1rem 1.25rem;display:flex;align-items:center;gap:12px;cursor:pointer;}
+.lektion-titel{flex:1;font-size:15px;font-weight:700;}
+.lektion-dauer{font-size:11px;font-weight:700;background:var(--bg2);border:1px solid var(--gray-mid);padding:3px 9px;color:var(--gray);white-space:nowrap;}
+.lektion-fortschritt{font-size:11px;color:var(--text3);white-space:nowrap;}
+.pfeil{transition:transform .15s;color:var(--gray);font-size:11px;}
+.lektion.offen .pfeil{transform:rotate(90deg);}
+.lektion-inhalt{display:none;border-top:1px solid var(--gray-mid);}
+.lektion.offen .lektion-inhalt{display:block;}
+.punkt-zeile{display:flex;gap:12px;padding:.9rem 1.25rem;border-bottom:1px solid var(--gray-mid);align-items:flex-start;}
+.punkt-zeile:last-child{border-bottom:none;}
+.punkt-zeile.erledigt{background:var(--green-light);}
+.check{width:22px;height:22px;border:2px solid var(--gray-mid);flex-shrink:0;cursor:pointer;display:flex;align-items:center;
+  justify-content:center;background:#fff;margin-top:2px;}
+.punkt-zeile.erledigt .check{background:var(--green);border-color:var(--green);}
+.check svg{display:none;}
+.punkt-zeile.erledigt .check svg{display:block;}
+.punkt-dauer{font-size:11px;font-weight:700;color:var(--gray);min-width:34px;flex-shrink:0;margin-top:4px;}
+.punkt-thema{font-size:14px;font-weight:700;margin-bottom:4px;}
+.punkt-inhalt{font-size:13px;color:var(--text2);line-height:1.65;white-space:pre-line;}
+.balken{height:5px;background:var(--gray-mid);}
+.balken-fill{height:5px;background:var(--green);transition:width .3s;}
+.site-footer{background:var(--black);color:#888;font-size:11px;text-align:center;padding:1rem;}
+@media print{
+  .site-header,.red-stripe,.site-footer,.btn,.check{display:none;}
+  .lektion-inhalt{display:block !important;}
+  .lektion{break-inside:avoid;}
+}
+.abschnitt{padding:.7rem 1.25rem .5rem;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--red-dark);background:var(--bg2);border-bottom:1px solid var(--gray-mid);}
+.r-logo{height:1.15em;width:auto;vertical-align:-0.2em;margin-right:2px;}
+.anleitung{display:inline-block;margin-top:4px;font-size:11px;font-weight:700;color:var(--red);text-decoration:none;border-bottom:1px solid var(--red);}
+.stand{font-size:11px;color:var(--text3);margin-top:.5rem;}
+.btn-link{text-decoration:none;}
+</style>
+</head>
+<body>
+
+<div class="site-header">
+  <div class="site-header-inner">
+    <img src="https://www.feuerwehr-meilen.ch/fileadmin/Public/Website/Templates/Images/Logo-FeuerwehrMeilen.png" alt="Stützpunktfeuerwehr Meilen" style="height:38px;width:auto;object-fit:contain;">
+    <div class="logo-text">Stützpunktfeuerwehr Meilen<span>Ausbildungsinhalte ULF-Maschinisten</span></div>
+  </div>
+</div>
+<div class="red-stripe"></div>
+
+<div class="page">
+  <div class="card">
+    <h2>Ausbildungsinhalte ULF-Maschinisten</h2>
+    <p class="sub">
+      Gedächtnisstütze für Ausbildner. Abgearbeitete Punkte lassen sich abhaken –
+      der Stand bleibt auf diesem Gerät gespeichert.
+    </p>
+    <div class="balken" style="margin-top:1rem"><div class="balken-fill" id="gesamt-balken" style="width:0%"></div></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:.75rem;gap:10px;flex-wrap:wrap">
+      <span class="sub" id="gesamt-text">0 von 0 Punkten abgearbeitet</span>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" onclick="alleAufklappen()">Alle aufklappen</button>
+        <button class="btn" onclick="zuruecksetzen()">Zurücksetzen</button>
+      </div>
+    </div>
+    <div class="stand" id="stand"></div>
+  </div>
+
+  <div id="lektionen"></div>
+</div>
+
+<div class="site-footer">© Stützpunktfeuerwehr Meilen / LOL &nbsp;·&nbsp; CLv1.00</div>
+
+<script>
+/* ── Netzwerk-Baustein für alle MWD-Seiten ──
+ * Google antwortet manchmal sofort, manchmal hängt eine Anfrage 30 Sekunden
+ * oder liefert eine Fehlerseite. Deshalb:
+ *  - Kommt nach 4 s keine Antwort, geht dieselbe Anfrage ein zweites Mal los
+ *    (danach nach 9, 16, 25 s). Die erste gültige Antwort gewinnt.
+ *  - Scheitert eine Anfrage (Fehlerseite), startet sofort die nächste.
+ *  - Nach 3 s erscheint «Server braucht gerade länger …».
+ *  - Nach 45 s ohne Erfolg: «Server nicht erreichbar» mit «Erneut versuchen».
+ * Alle Anfragen tragen dieselbe Kennung – der Server führt Schreibvorgänge
+ * dadurch nur einmal aus. Mehrfachanfragen werden fürs Aussetzer-Protokoll gemeldet.
+ */
+(function(){
+  const NACHFRAGEN=[0,4000,9000,16000,25000];  // Startzeitpunkte der Anfragen
+  const HOECHSTENS=45000;                         // danach aufgeben und fragen
+  const HINWEIS_NACH=3000;
+  const MELDE_URL="https://script.google.com/macros/s/AKfycbwvTL3yecdyTvSV5ZPgGslm5K-3UFjW9zc4A2qn_zUk50CcSIpXEaBE1hMiaU3GnNEQ/exec";
+  let aktiv=0, entscheid=null;
+
+  function banner(){
+    let b=document.getElementById("fw-netz-banner");
+    if(!b){
+      b=document.createElement("div");
+      b.id="fw-netz-banner";
+      b.style.cssText="position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:9999;max-width:92vw;"
+        +"color:#fff;font:600 13px 'Open Sans',Arial,sans-serif;padding:11px 16px;"
+        +"box-shadow:0 4px 18px rgba(0,0,0,.25);display:none;align-items:center;gap:12px;flex-wrap:wrap";
+      document.body.appendChild(b);
+    }
+    return b;
+  }
+  function zeigeWarten(){
+    if(entscheid) return;
+    const b=banner(); b.style.background="#1a1a1a";
+    b.textContent="⏳ Server braucht gerade länger, einen Moment …";
+    b.style.display="flex";
+  }
+  function verstecke(){
+    if(aktiv<=0&&!entscheid){ const b=document.getElementById("fw-netz-banner"); if(b) b.style.display="none"; }
+  }
+  function frageNochmals(){
+    if(entscheid) return entscheid;
+    entscheid=new Promise(resolve=>{
+      const b=banner(); b.style.background="#990000"; b.innerHTML="";
+      const t=document.createElement("span"); t.textContent="Server nicht erreichbar."; b.appendChild(t);
+      const knopf=(text,wert)=>{
+        const x=document.createElement("button"); x.textContent=text; x.type="button";
+        x.style.cssText="font:700 11px 'Open Sans',Arial,sans-serif;text-transform:uppercase;letter-spacing:.05em;"
+          +"padding:7px 12px;border:2px solid #fff;cursor:pointer;background:"+(wert?"#fff":"transparent")
+          +";color:"+(wert?"#990000":"#fff");
+        x.onclick=()=>{ entscheid=null; b.style.display="none"; resolve(wert); };
+        b.appendChild(x);
+      };
+      knopf("Erneut versuchen",true); knopf("Schliessen",false);
+      b.style.display="flex";
+    });
+    return entscheid;
+  }
+  function melden(d){
+    try{
+      fetch(MELDE_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+        body:JSON.stringify(Object.assign({type:"aussetzer_melden"},d))}).catch(()=>{});
+    }catch(e){}
+  }
+  function lesen(text){
+    const t=String(text||"").trim();
+    if(t==="ok") return {ok:true};   // ältere Server-Versionen
+    try{ return JSON.parse(t); }catch(e){ return null; }
+  }
+
+  /** Eine Runde: Anfragen gestaffelt starten, erste gültige Antwort gewinnt */
+  function runde(url,body,opts,aufruf){
+    return new Promise(resolve=>{
+      const start=Date.now();
+      let gestartet=0, offen=0, fertig=false, zeigt=false;
+      const abbrecher=[], uhren=[];
+      const ende=(ok,daten)=>{
+        if(fertig) return;
+        fertig=true;
+        uhren.forEach(clearTimeout);
+        abbrecher.forEach(a=>{ try{ a.abort(); }catch(e){} });
+        if(zeigt){ aktiv--; verstecke(); }
+        if(gestartet>1||!ok) melden({seite:opts.seite||location.hostname,aufruf,
+          versuche:gestartet,dauerMs:Date.now()-start,erfolg:ok});
+        resolve({ok,daten});
+      };
+      const starte=()=>{
+        if(fertig) return;
+        if(gestartet>=(opts.nachfragen||NACHFRAGEN).length){ if(offen===0) ende(false); return; }
+        gestartet++; offen++;
+        const a=new AbortController(); abbrecher.push(a);
+        fetch(url,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body,signal:a.signal})
+          .then(r=>r.text())
+          .then(text=>{
+            offen--;
+            if(fertig) return;
+            const daten=lesen(text);
+            if(daten && daten.error!=="BESCHAEFTIGT") return ende(true,daten);
+            if(!daten) console.warn("Keine gültige Antwort:",String(text).slice(0,160));
+            if(offen===0) uhren.push(setTimeout(starte,700));
+          })
+          .catch(e=>{
+            offen--;
+            if(fertig) return;
+            if(offen===0) uhren.push(setTimeout(starte,700));
+          });
+      };
+      // Bewusst lange Aufrufe (z.B. Systemcheck) können eigene Zeitpunkte angeben
+      (opts.nachfragen||NACHFRAGEN).forEach(t=>uhren.push(setTimeout(starte,t)));
+      if(!opts.still) uhren.push(setTimeout(()=>{ if(!fertig){ zeigt=true; aktiv++; zeigeWarten(); } },opts.hinweisNach||HINWEIS_NACH));
+      uhren.push(setTimeout(()=>ende(false),HOECHSTENS));
+    });
+  }
+
+  /**
+   * @param url     Adresse des Apps Script
+   * @param payload Daten (Objekt)
+   * @param opts    {seite:"Name fürs Protokoll", still:true für Hintergrundaufrufe ohne Anzeige}
+   */
+  window.fwAufruf=async function(url,payload,opts){
+    opts=opts||{};
+    payload=Object.assign({},payload);
+    if(!payload.anfrageId) payload.anfrageId=Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,10);
+    const body=JSON.stringify(payload);
+    const aufruf=payload.type||payload.action||"";
+    while(true){
+      const r=await runde(url,body,opts,aufruf);
+      if(r.ok) return r.daten;
+      if(opts.still) throw new Error("Server nicht erreichbar.");
+      const nochmals=await frageNochmals();
+      if(!nochmals){ verstecke(); throw new Error("Server nicht erreichbar. Bitte später erneut versuchen."); }
+    }
+  };
+})();
+
+</script>
+<script>
+/* Inhalte kommen seit CLv1.00 aus dem Admin (Sheet «MWD Ausbildungsinhalte»).
+ * Angezeigt wird sofort der zuletzt geladene Stand (auf dem Gerät gespeichert,
+ * beim allerersten Aufruf der eingebaute Stand unten); der aktuelle Stand wird
+ * im Hintergrund geholt. So funktioniert die Seite auch, wenn der Server hängt. */
+const KAT = "ULF";
+const EXEC_URL = "https://script.google.com/macros/s/AKfycbwvTL3yecdyTvSV5ZPgGslm5K-3UFjW9zc4A2qn_zUk50CcSIpXEaBE1hMiaU3GnNEQ/exec";
+const PDF_URL = "";
+const R_LOGO = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAeCAIAAAApXzB9AAAAAXNSR0IArs4c6QAAAAlwSFlzAAAOxAAADsQBlSsOGwAABOJJREFUSEvFVltoHGUUnn9mdnZmdjOzl1x2k6aJqU2WEHuxGk0frNAWxNrXYKWgD30SBNE3UYgPIoggiKQIIvhSvIR4QUVaS+pDWrSkpkmTprl1k2yTbPY+M7szO1fPMrLZzG7SKBKHvGT//3zfOec/5zsHWZaF7cmH7wlLiQTtJqaCrOTzBUUparpuGCaYEQTuIkmadns8LMvQu3H3IUw5QcxkBYQQRbngI0kCx0tpME0TSDVNU1UNfPX7OJ6r25lvW6ZiUd1IpDCEMQwDNDugAJksy5iFNTYE3W5qu5u1mUQpvx5PcpyX2V1mAF2WFUGQQk31dV5PTbIaTECzkUjzfN3OoVTDQXC5nNjYEKhJ5qw9SBpE81AaqAv4HGTgGRiCOYBU++GMaSW2RrmpmkkT0ml1YQpPxSg1b+mahZDpYnS+0dUWYcOtUC42OqRRLaqt+8IOsi1MUGmCKPE857gEHPKt38ypUWP6DyJ+nyqK0O3wZxCU4W9Gjx7Fnz7DP3WK8flsw1xO4Oq8jmrcwhRdfuD1ehzPk1uYES9fIm78QKeWCsE285HD+P5Ozh8wDF3cWEf3brrnx8ymNuPFtwInzkKHARM8mCTl2/e3VHq8yQTtmUim/X6+8jh7Z0we/oSduJIh+GjXCQ5hOFvX8eo70K/wTgVB0FbmtZ8+Y0a/yh5+znfhXd+BiG2eyeQa6gOVTb1ZEaACjmiyc1PS0MeeP3+WWnrcF95rKSZbF68RJAmZKWmEi+SDgcChJ9zdvRpGEvEoJqTKXgIUAFY6vckEYgMqUD6Tcjlp9Ed+4hehsZPqf0MPdzQk57zpZaLr8Ur7fHxVnhtnkWYynOXalCWAAsDaTKBpIDblM31h0ro2pBR19tS5YO+z+vIcUiTFInzdR8t38ol44utB9vqQaiLXsZN0e1f5CKAAsDYTtIitafaTqrEFLjGrHXzS6urFXRRamkZKPouxoeYQXNAUeerLz9defz58dRCpcrqvnz59jvF6y9AAZWvxJrejoO1/NbmgJNc4ZMgdPai53SrKruVJVMzrdNP0px+g8ZHA2uQBUrNwQnQHkqdfaXrptUDQXxOqBhM8MpTT32GBehOlTLpJIv3NRenXL/hiEmFWWF0nLn9YcoUkkkxI6Ov3n325+2BnNQdAAWDt7MFIgEFgn1EMy9aHNEQqs7e19sfEZ87rjA9+N1ifTNAGwi2czIR7uO4jQdJQNlYhmY45B1AAWMlEDAwMlN9G13W70MEdLS/l7ox5lsZJL6/7mz2xSbOQT73wps6FcJZFFsbHZ+gbw9mRbzPzM3qhgGkwJw3kZqANAAEKD6A8LFMm27ZzC5KUvjrs+u4jMh5VSJazCkm6ad/FEVd9+EFs1Zi4jmZv0okFtB4FJcSKssyH9Uif59BxFO7gjhyXFNXRuTupUUEUxd+vYNe/xxYniFQsFTnZ8fagiw/YbkJpCYkN+e4YvnibWJu3Vmbw9ftQh6vNx9rfv6SR7m3VCIxrKqy4GivcHSM3okZrBBqLoErKVvmZppVPJuT5CSJ2T49Oy+GI78x53gdCvWXe/4OpsXMR26dCfN2kaITw6qnhnISwC8CQhs7dDW71HdofLKo6gFQfOZlg5YBdAIb0vyCzpzuY19xb/teNxQ58j7awcpb3YrOsfNL/ZFv+C1nhv/Yk4aOXAAAAAElFTkSuQmCC";
+const EINGEBAUT = [{"id": "U1", "titel": "Lektion 1", "info": "3 Std · 1 Std Fahren mit 1. AdF, 2 Std ULF-Ausbildung mit beiden AdF, 1 Std Fahren mit 2. AdF", "punkte": [{"id": "U1-1", "abschnitt": "Inhalt", "dauer": "", "thema": "Fahrzeugspezifikationen", "inhalt": "ULF (Universal-Löschfahrzeug), IVECO 260, 1999 in Betrieb genommen\nLänge 9.80 m, Breite 2.5 m, Höhe 3.35 m, Gewicht 28 t, 520 PS, 17 l V8\nWassertank 5100 l, Schaumtank 1580 l (davon ca. 600 l gefüllt), Pulver 1500 kg (aktuell leer?), Diesel ? l", "seite": ""}, {"id": "U1-2", "abschnitt": "Inhalt", "dauer": "", "thema": "Um und auf dem Fahrzeug", "inhalt": "Tank analog ADL «manuell» mit Stutzen füllen\nDach: Handschubleiter 9.8 m, 3 × Steckleiter Alu, ? × 125-mm-Schläuche (formstabil) mit Seiher und Seihernetz\nEinfüllöffnung Scheibenwischflüssigkeit vorne am Fahrzeug ganz unten – muss oft nachgefüllt werden (irgendwo undicht), normales Wasser geht", "seite": ""}, {"id": "U1-3", "abschnitt": "Inhalt", "dauer": "", "thema": "Armaturen und Bedienungselemente", "inhalt": "Hauptschalter, Blinker und Bedienung der Scheinwerfer (kleiner Knopf unten am Handgerät)\nGelber Knopf: RAG-Kontrollleuchte\nLichtsteuerung rechts und mittig für Zusatzscheinwerfer\nSperrdifferenzial?\nAnderer Knopf beim Federspeicher?\nMotorbremse Fusspedal / Retarder", "seite": ""}, {"id": "U1-4", "abschnitt": "Inhalt", "dauer": "", "thema": "Anhängervorrichtung", "inhalt": "Achtung: Gesamtgewicht 28 t – keine Fahrten mit Anhänger erlaubt", "seite": ""}, {"id": "U1-5", "abschnitt": "Inhalt", "dauer": "", "thema": "RAG / RAG-Impulstrennschalter", "inhalt": "", "seite": ""}, {"id": "U1-6", "abschnitt": "Inhalt", "dauer": "", "thema": "Sitz- und Spiegeleinstellung", "inhalt": "", "seite": ""}, {"id": "U1-7", "abschnitt": "Inhalt", "dauer": "", "thema": "Tanken / Tankstutzen / Tankkarten", "inhalt": "", "seite": ""}, {"id": "U1-8", "abschnitt": "Inhalt", "dauer": "", "thema": "Fahren", "inhalt": "Auf immer enger werdenden Strassen fahren, um die Grösse des Fahrzeugs zu erfahren", "seite": ""}, {"id": "U1-9", "abschnitt": "Inhalt", "dauer": "", "thema": "Einlenken / Druck Doppelachse", "inhalt": "Auf einem Platz (z.B. Delica-Parkplatz) voll einschlagen und drehen. Dann aussteigen und den Druck auf die Hinterachsen zeigen – beim Einschlagen spüren, ab wann das Fahrzeug «kratzt»", "seite": ""}, {"id": "U1-10", "abschnitt": "Inhalt", "dauer": "", "thema": "Fahrtenheft", "inhalt": "Standort im Fahrzeug zeigen. Immer direkt nach der Fahrt eintragen: Datum, Grund und Kürzel – leserlich! Tanken eintragen (Statistik)", "seite": ""}, {"id": "U1-11", "abschnitt": "ULF retablieren", "dauer": "", "thema": "Fahrzeug innen und aussen reinigen, Ordnung in der Mannschaftskabine", "inhalt": "Aussenreinigung bei Bedarf, vor allem Radkästen; Scheiben nur wenn nötig (sonst gibt es Kalkablagerungen)\nInnenreinigung jedes Mal nach der Fahrt: Kübel mit Reinigungsmaterial an den Säulen, Innenraum mit Wischer oder feucht mit Schwamm", "seite": ""}, {"id": "U1-12", "abschnitt": "ULF retablieren", "dauer": "", "thema": "Diesel tanken, wenn unter 75 %", "inhalt": "", "seite": ""}, {"id": "U1-13", "abschnitt": "ULF retablieren", "dauer": "", "thema": "Wassertank mindestens 90 %", "inhalt": "", "seite": ""}, {"id": "U1-14", "abschnitt": "ULF retablieren", "dauer": "", "thema": "Schaumabgabe ab Tank: Schaumleitungen mit 50'000 l spülen – BAdF", "inhalt": "", "seite": ""}, {"id": "U1-15", "abschnitt": "ULF retablieren", "dauer": "", "thema": "Material komplettieren", "inhalt": "", "seite": ""}, {"id": "U1-16", "abschnitt": "ULF retablieren", "dauer": "", "thema": "Aggregate füllen", "inhalt": "", "seite": ""}, {"id": "U1-17", "abschnitt": "ULF retablieren", "dauer": "", "thema": "Fahrtenbuch ausfüllen, Luft und Strom anschliessen", "inhalt": "Kein 30 bar mehr für Pulver", "seite": ""}, {"id": "U1-18", "abschnitt": "ULF retablieren", "dauer": "", "thema": "Rep.-Zettel für defektes Material oder Schaumabgabe", "inhalt": "Blatt «Fahrzeug einsatzbereit stellen» erklären", "seite": ""}]}, {"id": "U2", "titel": "Lektion 2", "info": "3 Std · 1 Std Fahren mit 1. AdF, 2 Std ULF-Ausbildung mit beiden AdF, 1 Std Fahren mit 2. AdF", "punkte": [{"id": "U2-1", "abschnitt": "Inhalt", "dauer": "", "thema": "Materialkenntnis", "inhalt": "", "seite": ""}, {"id": "U2-2", "abschnitt": "Inhalt", "dauer": "", "thema": "Pumpenbetrieb Tankbetrieb / Saugbetrieb", "inhalt": "", "seite": ""}, {"id": "U2-3", "abschnitt": "Inhalt", "dauer": "", "thema": "Pumpenbetrieb mit Schaum", "inhalt": "Schaum ab Tank und von extern (trocken üben)", "seite": ""}, {"id": "U2-4", "abschnitt": "Inhalt", "dauer": "", "thema": "Pulver", "inhalt": "Hauptbedienungspanel sowie Pulverabgabepanel links und rechts (trocken üben)", "seite": ""}, {"id": "U2-5", "abschnitt": "Inhalt", "dauer": "", "thema": "Leiterlift", "inhalt": "", "seite": ""}, {"id": "U2-6", "abschnitt": "Inhalt", "dauer": "", "thema": "Generator, Lichtmast, Scheinwerfer", "inhalt": "", "seite": ""}, {"id": "U2-7", "abschnitt": "ULF retablieren", "dauer": "", "thema": "Fahrzeug innen und aussen reinigen, Ordnung in der Mannschaftskabine", "inhalt": "", "seite": ""}, {"id": "U2-8", "abschnitt": "ULF retablieren", "dauer": "", "thema": "Diesel tanken, wenn unter 75 %", "inhalt": "", "seite": ""}, {"id": "U2-9", "abschnitt": "ULF retablieren", "dauer": "", "thema": "Wassertank mindestens 90 %", "inhalt": "", "seite": ""}, {"id": "U2-10", "abschnitt": "ULF retablieren", "dauer": "", "thema": "Schaumabgabe ab Tank: Schaumleitungen mit 50'000 l spülen – BAdF", "inhalt": "", "seite": ""}, {"id": "U2-11", "abschnitt": "ULF retablieren", "dauer": "", "thema": "Material komplettieren", "inhalt": "", "seite": ""}, {"id": "U2-12", "abschnitt": "ULF retablieren", "dauer": "", "thema": "Aggregate füllen", "inhalt": "", "seite": ""}, {"id": "U2-13", "abschnitt": "ULF retablieren", "dauer": "", "thema": "Fahrtenbuch ausfüllen, Luft und Strom anschliessen", "inhalt": "", "seite": ""}, {"id": "U2-14", "abschnitt": "ULF retablieren", "dauer": "", "thema": "Rep.-Zettel für defektes Material", "inhalt": "", "seite": ""}]}, {"id": "U3", "titel": "Lektion 3", "info": "Bootseinwasserungsplatz Badi Meilen · mehrere AdF", "punkte": [{"id": "U3-1", "abschnitt": "Inhalt", "dauer": "", "thema": "Pumpe – Saugbetrieb mit Schaum", "inhalt": "Saugbetrieb und Schaum von extern ansaugen\n125-mm-Schläuche und Seiher vom Dach, Sicherungs- und Entleerungsleine", "seite": ""}, {"id": "U3-2", "abschnitt": "Inhalt", "dauer": "", "thema": "Materialkenntnis", "inhalt": "", "seite": ""}, {"id": "U3-3", "abschnitt": "ULF retablieren", "dauer": "", "thema": "Fahrzeug innen und aussen reinigen, Ordnung in der Mannschaftskabine", "inhalt": "", "seite": ""}, {"id": "U3-4", "abschnitt": "ULF retablieren", "dauer": "", "thema": "Diesel tanken, wenn unter 75 %", "inhalt": "", "seite": ""}, {"id": "U3-5", "abschnitt": "ULF retablieren", "dauer": "", "thema": "Wassertank mindestens 90 %", "inhalt": "", "seite": ""}, {"id": "U3-6", "abschnitt": "ULF retablieren", "dauer": "", "thema": "Schaumabgabe ab Tank: Schaumleitungen mit 50'000 l spülen – BAdF", "inhalt": "", "seite": ""}, {"id": "U3-7", "abschnitt": "ULF retablieren", "dauer": "", "thema": "Material komplettieren", "inhalt": "", "seite": ""}, {"id": "U3-8", "abschnitt": "ULF retablieren", "dauer": "", "thema": "Aggregate füllen", "inhalt": "", "seite": ""}, {"id": "U3-9", "abschnitt": "ULF retablieren", "dauer": "", "thema": "Fahrtenbuch ausfüllen, Luft und Strom anschliessen", "inhalt": "", "seite": ""}, {"id": "U3-10", "abschnitt": "ULF retablieren", "dauer": "", "thema": "Rep.-Zettel für defektes Material", "inhalt": "", "seite": ""}]}];
+const INHALT_KEY = "ga_inhalte_" + KAT;
+const HAKEN_KEY = "ga_haken_" + KAT;
+let LEKTIONEN = EINGEBAUT, STAND = 0, ERLEDIGT = {};
+const OFFEN = {};
+
+function $(id){return document.getElementById(id);}
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function mitLogo(s){return esc(s).replace(/\[R\]/g,`<img class="r-logo" src="${R_LOGO}" alt="R" title="Rusterholz-Logo auf dem Touchscreen">`);}
+
+function laden(){
+  try{
+    const c = JSON.parse(localStorage.getItem(INHALT_KEY) || "null");
+    if(c && Array.isArray(c.lektionen) && c.lektionen.length){ LEKTIONEN = c.lektionen; STAND = c.stand || 0; }
+  }catch(e){}
+  try{
+    const h = localStorage.getItem(HAKEN_KEY);
+    if(h) ERLEDIGT = JSON.parse(h) || {};
+    else if(KAT === "B"){
+      // Haken aus der alten Seite (nach Position gespeichert) einmalig übernehmen
+      const alt = JSON.parse(localStorage.getItem("ga_b_fortschritt_v1") || "{}");
+      Object.keys(alt).forEach(k => { const [l,p] = k.split("-").map(Number); ERLEDIGT["B"+(l+1)+"-"+(p+1)] = true; });
+      speichernHaken();
+    }
+  }catch(e){ ERLEDIGT = {}; }
+}
+function speichernHaken(){ try{ localStorage.setItem(HAKEN_KEY, JSON.stringify(ERLEDIGT)); }catch(e){} }
+
+function rendern(){
+  $("lektionen").innerHTML = LEKTIONEN.map(lek => {
+    const erledigt = lek.punkte.filter(p => ERLEDIGT[p.id]).length;
+    let abschnitt = "";
+    return `<div class="lektion${OFFEN[lek.id]?" offen":""}" id="lek-${esc(lek.id)}">
+      <div class="lektion-kopf" onclick="lektionUmschalten('${esc(lek.id)}')">
+        <span class="pfeil">&#9654;</span>
+        <span class="lektion-titel">${mitLogo(lek.titel)}</span>
+        <span class="lektion-fortschritt" id="lek-fort-${esc(lek.id)}">${erledigt}/${lek.punkte.length}</span>
+        ${lek.info?`<span class="lektion-dauer">${esc(lek.info)}</span>`:""}
+      </div>
+      <div class="lektion-inhalt">
+        ${lek.punkte.map(p => {
+          let kopf = "";
+          if((p.abschnitt||"") !== abschnitt){ abschnitt = p.abschnitt||""; if(abschnitt) kopf = `<div class="abschnitt">${mitLogo(abschnitt)}</div>`; }
+          const an = !!ERLEDIGT[p.id];
+          const seite = parseInt(p.seite,10);
+          return kopf + `<div class="punkt-zeile${an?" erledigt":""}" id="pz-${esc(p.id)}" onclick="punktUmschalten('${esc(p.id)}','${esc(lek.id)}')">
+            <div class="check">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            ${p.dauer?`<div class="punkt-dauer">${esc(p.dauer)}</div>`:""}
+            <div style="flex:1;min-width:0">
+              <div class="punkt-thema">${mitLogo(p.thema)}</div>
+              ${p.inhalt?`<div class="punkt-inhalt">${mitLogo(p.inhalt)}</div>`:""}
+              ${PDF_URL && seite>0?`<a class="anleitung" href="${PDF_URL}#page=${seite+1}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Anleitung S. ${seite}</a>`:""}
+            </div>
+          </div>`;
+        }).join("")}
+      </div>
+    </div>`;
+  }).join("");
+  gesamtAktualisieren();
+  $("stand").textContent = STAND ? "Inhalte Stand " + new Date(STAND).toLocaleString("de-CH",{dateStyle:"short",timeStyle:"short"}) : "";
+}
+
+function lektionUmschalten(id){ OFFEN[id] = !OFFEN[id]; $("lek-"+id).classList.toggle("offen", !!OFFEN[id]); }
+
+function punktUmschalten(pid, lid){
+  ERLEDIGT[pid] = !ERLEDIGT[pid];
+  if(!ERLEDIGT[pid]) delete ERLEDIGT[pid];
+  speichernHaken();
+  $("pz-"+pid).classList.toggle("erledigt", !!ERLEDIGT[pid]);
+  const lek = LEKTIONEN.find(l => l.id === lid);
+  $("lek-fort-"+lid).textContent = lek.punkte.filter(p => ERLEDIGT[p.id]).length + "/" + lek.punkte.length;
+  gesamtAktualisieren();
+}
+
+function gesamtAktualisieren(){
+  const alle = [].concat(...LEKTIONEN.map(l => l.punkte));
+  const total = alle.length, erledigt = alle.filter(p => ERLEDIGT[p.id]).length;
+  $("gesamt-balken").style.width = total ? (erledigt/total*100)+"%" : "0%";
+  $("gesamt-text").textContent = `${erledigt} von ${total} Punkten abgearbeitet`;
+}
+
+function alleAufklappen(){
+  const alleOffen = LEKTIONEN.every(l => OFFEN[l.id]);
+  LEKTIONEN.forEach(l => { OFFEN[l.id] = !alleOffen; });
+  rendern();
+}
+
+function zuruecksetzen(){
+  if(!confirm("Alle Haken zurücksetzen?")) return;
+  ERLEDIGT = {}; speichernHaken(); rendern();
+}
+
+/** Aktuellen Stand im Hintergrund holen – ohne Hinweisleiste, Fehler werden ignoriert */
+async function aktualisieren(){
+  try{
+    const r = await fwAufruf(EXEC_URL, {type:"ga_inhalte", kategorie:KAT}, {seite:"Grundausbildung "+KAT, still:true});
+    if(!r || !r.ok || !Array.isArray(r.lektionen) || !r.lektionen.length) return;
+    try{ localStorage.setItem(INHALT_KEY, JSON.stringify({lektionen:r.lektionen, stand:r.stand||0})); }catch(e){}
+    if((r.stand||0) === STAND && STAND) return;
+    LEKTIONEN = r.lektionen; STAND = r.stand || 0;
+    rendern();
+  }catch(e){ /* Server gerade nicht erreichbar: gespeicherter Stand bleibt */ }
+}
+
+laden();
+rendern();
+aktualisieren();
+</script>
+</body>
+</html>
