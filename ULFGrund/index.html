@@ -58,6 +58,15 @@ body{font-family:'Open Sans',Arial,sans-serif;background:var(--bg3);color:var(--
 .abschnitt{padding:.7rem 1.25rem .5rem;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--red-dark);background:var(--bg2);border-bottom:1px solid var(--gray-mid);}
 .r-logo{height:1.15em;width:auto;vertical-align:-0.2em;margin-right:2px;}
 .anleitung{display:inline-block;margin-top:4px;font-size:11px;font-weight:700;color:var(--red);text-decoration:none;border-bottom:1px solid var(--red);}
+.bilder{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;}
+.bilder figure{margin:0;width:140px;}
+.bilder img{width:140px;height:100px;object-fit:cover;border:1px solid var(--line,#ddd);cursor:zoom-in;display:block;}
+.bilder figcaption{font-size:11px;color:var(--text3,#666);margin-top:2px;line-height:1.25;}
+.bild-gross{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;z-index:999;padding:1rem;cursor:zoom-out;}
+.bild-gross img{max-width:100%;max-height:85vh;object-fit:contain;}
+.bild-gross div{color:#fff;font-size:13px;margin-top:10px;text-align:center;}
+@media print{.bilder img{width:120px;height:85px;}.bild-gross{display:none;}}
 .stand{font-size:11px;color:var(--text3);margin-top:.5rem;}
 .btn-link{text-decoration:none;}
 </style>
@@ -85,6 +94,7 @@ body{font-family:'Open Sans',Arial,sans-serif;background:var(--bg3);color:var(--
       <div style="display:flex;gap:8px;flex-wrap:wrap">
         <button class="btn" onclick="alleAufklappen()">Alle aufklappen</button>
         <button class="btn" onclick="zuruecksetzen()">Zurücksetzen</button>
+        <button class="btn" onclick="alleAufklappen();setTimeout(()=>window.print(),300)">Als PDF / drucken</button>
       </div>
     </div>
     <div class="stand" id="stand"></div>
@@ -93,7 +103,7 @@ body{font-family:'Open Sans',Arial,sans-serif;background:var(--bg3);color:var(--
   <div id="lektionen"></div>
 </div>
 
-<div class="site-footer">© Stützpunktfeuerwehr Meilen / LOL &nbsp;·&nbsp; CLv1.04</div>
+<div class="site-footer">© Stützpunktfeuerwehr Meilen / LOL &nbsp;·&nbsp; CLv1.05</div>
 
 <script>
 /* ── Netzwerk-Baustein für alle MWD-Seiten (Stand W1.00) ──
@@ -291,7 +301,7 @@ body{font-family:'Open Sans',Arial,sans-serif;background:var(--bg3);color:var(--
 
 </script>
 <script>
-/* Inhalte kommen seit CLv1.04 aus dem Admin (Sheet «MWD Ausbildungsinhalte»).
+/* Inhalte kommen seit CLv1.05 aus dem Admin (Sheet «MWD Ausbildungsinhalte»).
  * Angezeigt wird sofort der zuletzt geladene Stand (auf dem Gerät gespeichert,
  * beim allerersten Aufruf der eingebaute Stand unten); der aktuelle Stand wird
  * im Hintergrund geholt. So funktioniert die Seite auch, wenn der Server hängt. */
@@ -352,6 +362,7 @@ function rendern(){
             <div style="flex:1;min-width:0">
               <div class="punkt-thema">${mitLogo(p.thema)}</div>
               ${p.inhalt?`<div class="punkt-inhalt">${mitLogo(p.inhalt)}</div>`:""}
+              ${bilderHtml(p)}
               ${PDF_URL && seite>0?`<a class="anleitung" href="${PDF_URL}#page=${seite+1}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Anleitung S. ${seite}</a>`:""}
             </div>
           </div>`;
@@ -375,6 +386,23 @@ function punktUmschalten(pid, lid){
   gesamtAktualisieren();
 }
 
+
+/* ── Bilder je Punkt (seit CLv1.05) ── */
+function bilderHtml(p){
+  const b=Array.isArray(p.bilder)?p.bilder:[];
+  if(!b.length) return "";
+  return `<div class="bilder" onclick="event.stopPropagation()">`+b.map((x,i)=>
+    `<figure><img src="${esc(x.url)}" alt="${esc(x.unterschrift||"")}" loading="lazy"
+       onclick="bildGross('${esc(x.url)}','${esc((x.unterschrift||"").replace(/'/g,"\\'"))}')">
+     ${x.unterschrift?`<figcaption>${esc(x.unterschrift)}</figcaption>`:""}</figure>`).join("")+`</div>`;
+}
+function bildGross(url,text){
+  const d=document.createElement("div");
+  d.className="bild-gross";
+  d.innerHTML=`<img src="${url}" alt="">`+(text?`<div>${text}</div>`:"");
+  d.onclick=()=>d.remove();
+  document.body.appendChild(d);
+}
 function gesamtAktualisieren(){
   const alle = [].concat(...LEKTIONEN.map(l => l.punkte));
   const total = alle.length, erledigt = alle.filter(p => ERLEDIGT[p.id]).length;
